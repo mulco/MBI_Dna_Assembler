@@ -8,19 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * 
  * @author Jacek
  */
 public class SubsequencesGenerator {
-    public static List<String> generate(String longSequence, int n) {
-        List<String> subsequences = new ArrayList<>();
-        
-        for(int i = 0; i+n < longSequence.length()+1; i++) {
-            subsequences.add(longSequence.substring(i, i+n));
-        }
-        
-        return subsequences;
-    }
-    
-    
+	public static List<String> generate(final String longSequence, final int n) {
+		final List<String> subsequences = new ArrayList<>();
+
+		for (int i = 0; i + n < longSequence.length() + 1; i++) {
+			subsequences.add(longSequence.substring(i, i + n));
+		}
+
+		return subsequences;
+	}
+
 }
