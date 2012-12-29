@@ -40,9 +40,9 @@ public class DeBruijnGraphBuilder {
 				if (!graph.containsVertex(v2)) {
 					graph.addVertex(v2);
 				}
-				if (!graph.containsEdge(v1, v2)) {
-					graph.addEdge(v1, v2);
-				}
+				// if (!graph.containsEdge(v1, v2)) {
+				graph.addEdge(v1, v2);
+				// }
 			}
 		}
 		return graph;

@@ -29,6 +29,12 @@ public class DeBruijnGraph extends DirectedMultigraph<String, String> {
 
 	// Algorytm Fleuryego
 	public List<String> findEulerPath() {
+		// return findEulerPath(true);
+		// return fleuryAlghoritm();
+		return myAlgorithm();
+	}
+
+	private List<String> fleuryAlghoritm() {
 		final List<String> eulerPath = new ArrayList<>();
 		final List<String> stack = new ArrayList<>();
 		final DeBruijnGraph graph = (DeBruijnGraph) this.clone();
@@ -52,13 +58,96 @@ public class DeBruijnGraph extends DirectedMultigraph<String, String> {
 			}
 			break;
 		}
-		System.out.println("eulerPath: " + eulerPath);
+		// System.out.println("eulerPath: " + eulerPath);
 
 		// for(String vertex : this.vertexSet()) {
 		// eulerPath.add(vertex);
 		// }
 
 		return eulerPath;
+	}
+
+	private List<String> myAlgorithm() {
+		final DeBruijnGraph graph = (DeBruijnGraph) this.clone();
+
+		List<String> path = new ArrayList<String>();
+
+		if (graph.edgeSet().size() == 0) {
+			return path;
+		}
+		// znajdujemy wierzcho³ek który ma tylko jedn¹ krawêdŸ wychodzac¹
+		String v = null;
+		for (final String vertex : graph.vertexSet()) {
+			if (graph.incomingEdgesOf(vertex).size() == 0) {
+				System.out.println("INIT VERTEX: " + vertex);
+				v = vertex;
+			}
+		}
+		// jeœli taki nie istnieje, bierzemy pierwszy wierzcho³ek o dodatniej
+		// dywergencji
+		if (v == null) {
+			for (final String vertex : graph.vertexSet()) {
+				if (graph.outgoingEdgesOf(vertex).size() > graph
+						.incomingEdgesOf(vertex).size()) {
+					v = vertex;
+					break;
+				}
+			}
+		}
+		// je¿eli taki nie istnieje, to bierzemy dowolny
+		if (v == null) {
+			v = (String) graph.vertexSet().toArray()[0];
+		}
+
+		path.add(v);
+		String startVertex = v;
+		boolean firstTime = true;
+		while (true) {
+			final List<String> tempPath = new ArrayList<String>();
+			// idziemy prowadzeni za r¹czkê dowoln¹ œcie¿k¹/cyklem dopóki to
+			// mo¿liwe
+			while (graph.outgoingEdgesOf(v).size() > 0) {
+				final String edge_v_w = graph.outgoingEdgesOf(v).toArray()[0]
+						.toString();
+				final String w = graph.getEdgeTarget(edge_v_w);
+				graph.removeEdge(v, w);
+				v = w;
+				tempPath.add(v);
+			}
+
+			if (firstTime || startVertex.equals(v)) {
+				firstTime = false;
+				// wplatamy tempPath do path
+				final List<String> joinedPath = new ArrayList<String>();
+				String vertex;
+				do {
+					vertex = path.remove(0);
+					joinedPath.add(vertex);
+				} while (!vertex.equals(startVertex));
+				joinedPath.addAll(tempPath);
+				joinedPath.addAll(path);
+				path = joinedPath;
+			}
+			// sprawdzamy, czy zostawiliœmy jakieœ odnó¿a.
+			// Jeœli tak, to jeœli graf jest eulerowski, to odac którymœ odnó¿ek
+			// wrócimy do tego samego punktu
+			// Jeœli nie, to graf nie by³ eulerowski
+			boolean cont = false;
+			for (final String vertex2 : path) {
+				if (graph.outgoingEdgesOf(vertex2).size() > 0) {
+					v = vertex2;
+					startVertex = v;
+					cont = true;
+					break;
+				}
+			}
+			if (cont) {
+				continue;
+			}
+			break;
+		}
+
+		return path;
 	}
 
 	public void show() {

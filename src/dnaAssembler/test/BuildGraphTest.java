@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import dnaAssembler.algorithm.DeBruijnGraphAlgorithm;
 import dnaAssembler.builder.DeBruijnGraphBuilder;
 import dnaAssembler.generator.SequenceGenerator;
-import dnaAssembler.generator.SubsequencesGenerator;
 import dnaAssembler.graph.DeBruijnGraph;
 
 /**
@@ -32,6 +31,9 @@ public class BuildGraphTest {
 		subsequences.add("ABAAB");
 		subsequences.add("BAABA");
 		subsequences.add("AABAB");
+
+		// subsequences.add("AAABC");
+		// subsequences.add("ABCDE");
 
 		System.out.println("Sequence: " + sequence);
 		System.out.println(subsequences);
